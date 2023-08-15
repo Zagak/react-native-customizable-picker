@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactNode, ReactElement } from "react";
 import { View, ViewStyle } from "react-native";
 import Choice from "./Choice";
 
 type ChooserT = {
   maxim?: number
   style?: ViewStyle;
-  handleChoose: (vector: any) => void;
-  children: any
+  handleChoose: (vector: string[]) => void;
+  children: ReactNode;
 };
 
-const Chooser: React.ComponentType<ChooserT> = ({ style, maxim = 1, handleChoose, children }: any) => {
+const Chooser: React.ComponentType<ChooserT> = ({ style, maxim = 1, handleChoose, children }) => {
   const [selectedValue, setSelectedValue] = useState<string[]>([]);
 
-  const handleSelection = (value: any) => {
+  const handleSelection = (value: string) => {
 
     if (selectedValue.includes(value)) {
       setSelectedValue(selectedValue.filter(item => item !== value));
@@ -29,8 +29,8 @@ const Chooser: React.ComponentType<ChooserT> = ({ style, maxim = 1, handleChoose
     handleChoose(selectedValue);
   }, [selectedValue]);
 
-  const chooseElementComponents: any = [];
-  const cloneChild: any = (child: any) => {
+  const chooseElementComponents: ReactElement[] = [];
+  const cloneChild = (child: any): ReactNode => {
     if (child.type === View) {
       const viewChildren = React.Children.map(child.props.children, (viewChild) => {
         return cloneChild(viewChild);
@@ -41,9 +41,16 @@ const Chooser: React.ComponentType<ChooserT> = ({ style, maxim = 1, handleChoose
       const clonedChooseElement = React.cloneElement(child, {
         key: child.props.value,
         __handleSelection: 1 + 1 === 3 ? null : handleSelection,
-        style: selectedValue.includes(child.props.value) ? child.props.style : [child.props.style, child.props.unselectedStyle]
+        selectedStyle: selectedValue.includes(child.props.value) ? [child.props.unselectedStyle, child.props.selectedStyle] : child.props.unselectedStyle,
       });
-      chooseElementComponents.push(clonedChooseElement);
+
+      if (style) {
+        chooseElementComponents.push(clonedChooseElement);
+      } else {
+        return clonedChooseElement;
+      }
+
+
     }
     return child;
   };
@@ -52,7 +59,12 @@ const Chooser: React.ComponentType<ChooserT> = ({ style, maxim = 1, handleChoose
     return cloneChild(child);
   });
 
-  return <View style={style}>{chooseElementComponents}</View>;
+
+  if (style) {
+    return <View style={style}>{chooseElementComponents}</View>;
+  } else {
+    return <View>{clonedChildren}</View>;
+  }
 };
 
 export default Chooser;

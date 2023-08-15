@@ -1,19 +1,19 @@
-import React from "react";
-import { Pressable, ViewStyle, View } from "react-native";
+import React, { ReactNode } from "react";
+import { Pressable, ViewStyle } from "react-native";
 
-type ChooseElementT = {
+export type ChoiceT = {
   value: string;
   __handleSelection?: (selection: string) => void;
-  children?: any;
-  style?: ViewStyle;
-  pressed?: any;
+  children?: ReactNode;
+  selectedStyle?: ViewStyle;
+  pressed?: boolean;
   unselectedStyle?: ViewStyle;
 };
 
-const Choice: React.ComponentType<ChooseElementT> = ({ unselectedStyle, style, value, children, __handleSelection = (value: string) => { } }: ChooseElementT) => {
+const Choice: React.ComponentType<ChoiceT> = ({ unselectedStyle, selectedStyle, value, children, __handleSelection = (value: string) => { } }: ChoiceT) => {
 
   return (
-    <Pressable onPress={() => __handleSelection(value)} style={({ pressed }) => [style, pressed && [{ opacity: 0.7 }]]}>
+    <Pressable onPress={() => __handleSelection(value)} style={({ pressed }) => [selectedStyle, pressed && [{ opacity: 0.7 }]]}>
       {children}
     </Pressable>
   );
