@@ -24,6 +24,8 @@ Every item that you want to be a possible choice to pick from need to be wrapped
 and all of them wrapped in a Chooser which is the container for all of the Choice elements.
 
 ```js
+import { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 import { Chooser, Choice } from 'react-native-customizable-picker';
 
 const Example1 = () => {
@@ -49,7 +51,8 @@ const Example1 = () => {
 }
 ```
 
-### Look in the examples folder for more                                                                                                                             |
+### Look in the examples folder for more                                                                                                   
+
 
 ### Props
 
