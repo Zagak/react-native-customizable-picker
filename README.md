@@ -14,7 +14,7 @@ Decide from how many options are available for chosing.
 
 ### Installing
 
-```
+
 npm i reat-native-customizable-picker
 
 
